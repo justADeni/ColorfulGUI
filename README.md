@@ -19,7 +19,7 @@ Basic requirements for working with the library
 
 ### Requirements
 
-* Paper API 1.14+
+* Spigot API 1.20.2+
 
 Once all requirements have been met, you must add the dependency to Maven
 

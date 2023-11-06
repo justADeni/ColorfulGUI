@@ -23,6 +23,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
+import org.bukkit.profile.PlayerProfile;
 
 import java.util.*;
 
@@ -196,7 +197,10 @@ public class DynamicItemBuilder implements ItemBuilder<DynamicItem> {
         if (isSkull) {
             itemStack.setType(Material.PLAYER_HEAD);
             SkullMeta skullMeta = (SkullMeta) itemMeta;
-            skullMeta.setPlayerProfile(player.getPlayerProfile());
+            PlayerProfile profile = player.getPlayerProfile();
+            if (!profile.isComplete())
+                profile = profile.update().join();
+            skullMeta.setOwnerProfile(profile);
             itemStack.setItemMeta(skullMeta);
         }
 
