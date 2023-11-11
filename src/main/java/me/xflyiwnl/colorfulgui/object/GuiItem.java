@@ -45,12 +45,10 @@ public class GuiItem {
 
     public void setItemStack(ItemStack itemStack) {
         NamespacedKey key = new NamespacedKey(ColorfulGUI.getInstance(), "colorfulgui");
-        ItemMeta oldMeta = itemStack.getItemMeta();
-        if (oldMeta.getPersistentDataContainer().has(key, PersistentDataType.STRING)){
-            ItemMeta newMeta = itemStack.getItemMeta();
-            newMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, oldMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING));
-            itemStack.setItemMeta(newMeta);
-        }
+        ItemMeta oldMeta = this.itemStack.getItemMeta();
+        ItemMeta newMeta = itemStack.getItemMeta();
+        newMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, oldMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING));
+        itemStack.setItemMeta(newMeta);
         this.itemStack = itemStack;
     }
 
