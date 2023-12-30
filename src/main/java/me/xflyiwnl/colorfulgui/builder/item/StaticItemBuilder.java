@@ -60,22 +60,26 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
     }
 
     public StaticItemBuilder from(ItemStack itemStack) {
-        this.itemStack = itemStack;
+        if (itemStack != null)
+            this.itemStack = itemStack;
         return this;
     }
 
     public StaticItemBuilder material(Material material) {
-        this.material = material;
+        if (material != null)
+            this.material = material;
         return this;
     }
 
     public StaticItemBuilder name(String name) {
-        this.name = name;
+        if (name != null)
+            this.name = name;
         return this;
     }
 
     public StaticItemBuilder lore(List<String> lore) {
-        this.lore = lore;
+        if (lore != null)
+            this.lore = lore;
         return this;
     }
 
@@ -100,47 +104,61 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
     }
 
     public StaticItemBuilder enchant(Enchantment enchantment, int level) {
-        enchantments.put(enchantment, level);
+        if (enchantment != null)
+            enchantments.put(enchantment, level);
         return this;
     }
 
     public StaticItemBuilder action(GuiAction<InventoryClickEvent> action) {
-        this.action = action;
+        if (action != null)
+            this.action = action;
         return this;
     }
 
     public StaticItemBuilder skull(Player player) {
-        this.player = player;
-        this.isSkull = true;
+        if (player != null) {
+            this.player = player;
+            this.isSkull = true;
+        }
         return this;
     }
 
     public StaticItemBuilder potionData(PotionData potionData) {
-        this.isPotion = true;
-        this.potionData = potionData;
+        if (potionData != null) {
+            this.isPotion = true;
+            this.potionData = potionData;
+        }
         return this;
     }
 
     public StaticItemBuilder color(Color color) {
-        this.isPotion = true;
-        this.color = color;
+        if (color != null) {
+            this.isPotion = true;
+            this.color = color;
+        }
         return this;
     }
 
     public StaticItemBuilder pattern(int i, Pattern pattern) {
-        this.isBanner = true;
-        this.patternMap.put(i, pattern);
+        if (pattern != null) {
+            this.isBanner = true;
+            this.patternMap.put(i, pattern);
+        }
         return this;
     }
 
     public StaticItemBuilder patterns(List<Pattern> patterns) {
-        this.isBanner = true;
-        this.patterns = patterns;
+        if (patterns != null && !patterns.isEmpty()) {
+            this.isBanner = true;
+            this.patterns = patterns;
+        }
         return this;
     }
 
     public StaticItemBuilder meta(MetaChange<ItemMeta> meta) {
-        this.metaChange = meta;
+        if (meta != null) {
+            this.metaChange = meta;
+        }
         return this;
     }
 
