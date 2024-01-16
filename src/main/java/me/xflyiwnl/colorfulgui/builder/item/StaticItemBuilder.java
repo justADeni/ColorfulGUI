@@ -9,6 +9,7 @@ import me.xflyiwnl.colorfulgui.util.TextUtil;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -43,7 +44,7 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
     private boolean isBanner = false;
     private boolean isPotion = false;
     private boolean isSkull = false;
-    private Player player;
+    private OfflinePlayer player;
 
     private Map<Enchantment, Integer> enchantments = new HashMap<Enchantment, Integer>();
     private GuiAction<InventoryClickEvent> action;
@@ -115,7 +116,7 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
-    public StaticItemBuilder skull(Player player) {
+    public StaticItemBuilder skull(OfflinePlayer player) {
         if (player != null) {
             this.player = player;
             this.isSkull = true;
