@@ -5,7 +5,7 @@ import me.xflyiwnl.colorfulgui.builder.ItemBuilder;
 import me.xflyiwnl.colorfulgui.object.StaticItem;
 import me.xflyiwnl.colorfulgui.object.action.GuiAction;
 import me.xflyiwnl.colorfulgui.object.action.MetaChange;
-import me.xflyiwnl.colorfulgui.util.TextUtil;
+import me.xflyiwnl.colorfulgui.util.ColorUtils;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -180,10 +180,10 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         if (itemMeta == null) itemMeta = itemStack.getItemMeta();
 
         if (name != null) {
-            itemMeta.setDisplayName(TextUtil.colorize(name));
+            itemMeta.setDisplayName(ColorUtils.colorize(name));
         }
 
-        itemMeta.setLore(TextUtil.colorize(lore));
+        itemMeta.setLore(ColorUtils.colorize(lore));
 
         if (!enchantments.isEmpty()) {
             for (Enchantment enchantment : enchantments.keySet()) {

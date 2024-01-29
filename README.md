@@ -43,5 +43,8 @@ ColorfulGUI colorfulGUI = new ColorfulGUI(yourMainClass);
 
 then follow the documentation [here](https://github.com/xflyiwnl/ColorfulGUI/wiki)
 
+## Color in strings
+for more information on color formatting, [click here](https://github.com/M3II0/Spigot-Color-Utils)
+
 ## Communication
 If you need help, you can ask a question in our discord server - [discord](https://discord.gg/SKgdTX6ar5)
