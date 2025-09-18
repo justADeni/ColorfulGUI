@@ -7,7 +7,7 @@ import me.xflyiwnl.colorfulgui.object.DynamicItem;
 import me.xflyiwnl.colorfulgui.object.action.MetaChange;
 import me.xflyiwnl.colorfulgui.object.action.UpdateItem;
 import me.xflyiwnl.colorfulgui.object.event.UpdateItemEvent;
-import me.xflyiwnl.colorfulgui.util.TextUtil;
+import me.xflyiwnl.colorfulgui.util.ColorUtils;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -22,6 +22,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
+import org.bukkit.profile.PlayerProfile;
 
 import java.util.*;
 
@@ -178,10 +179,10 @@ public class DynamicItemBuilder implements ItemBuilder<DynamicItem> {
         if (itemMeta == null) itemMeta = itemStack.getItemMeta();
 
         if (name != null) {
-            itemMeta.setDisplayName(TextUtil.colorize(name));
+            itemMeta.setDisplayName(ColorUtils.colorize(name));
         }
 
-        itemMeta.setLore(TextUtil.colorize(lore));
+        itemMeta.setLore(ColorUtils.colorize(lore));
 
         if (!enchantments.isEmpty()) {
             for (Enchantment enchantment : enchantments.keySet()) {
@@ -211,7 +212,10 @@ public class DynamicItemBuilder implements ItemBuilder<DynamicItem> {
         if (isSkull) {
             itemStack.setType(Material.PLAYER_HEAD);
             SkullMeta skullMeta = (SkullMeta) itemMeta;
-            skullMeta.setPlayerProfile(player.getPlayerProfile());
+            PlayerProfile profile = player.getPlayerProfile();
+            if (!profile.isComplete())
+                profile = profile.update().join();
+            skullMeta.setOwnerProfile(profile);
             itemStack.setItemMeta(skullMeta);
         }
 

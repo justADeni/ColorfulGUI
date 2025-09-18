@@ -5,10 +5,11 @@ import me.xflyiwnl.colorfulgui.object.action.click.ClickStaticAction;
 import me.xflyiwnl.colorfulgui.ColorfulGUI;
 import me.xflyiwnl.colorfulgui.object.StaticItem;
 import me.xflyiwnl.colorfulgui.object.action.MetaChange;
-import me.xflyiwnl.colorfulgui.util.TextUtil;
+import me.xflyiwnl.colorfulgui.util.ColorUtils;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -20,6 +21,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
+import org.bukkit.profile.PlayerProfile;
 
 import java.util.*;
 
@@ -42,7 +44,7 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
     private boolean isBanner = false;
     private boolean isPotion = false;
     private boolean isSkull = false;
-    private Player player;
+    private OfflinePlayer player;
 
     private Map<Enchantment, Integer> enchantments = new HashMap<Enchantment, Integer>();
     private ClickStaticAction action;
@@ -64,22 +66,26 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
     }
 
     public StaticItemBuilder from(ItemStack itemStack) {
-        this.itemStack = itemStack;
+        if (itemStack != null)
+            this.itemStack = itemStack;
         return this;
     }
 
     public StaticItemBuilder material(Material material) {
-        this.material = material;
+        if (material != null)
+            this.material = material;
         return this;
     }
 
     public StaticItemBuilder name(String name) {
-        this.name = name;
+        if (name != null)
+            this.name = name;
         return this;
     }
 
     public StaticItemBuilder lore(List<String> lore) {
-        this.lore = lore;
+        if (lore != null)
+            this.lore = lore;
         return this;
     }
 
@@ -104,7 +110,8 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
     }
 
     public StaticItemBuilder enchant(Enchantment enchantment, int level) {
-        enchantments.put(enchantment, level);
+        if (enchantment != null)
+            enchantments.put(enchantment, level);
         return this;
     }
 
@@ -113,38 +120,50 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
-    public StaticItemBuilder skull(Player player) {
-        this.player = player;
-        this.isSkull = true;
+    public StaticItemBuilder skull(OfflinePlayer player) {
+        if (player != null) {
+            this.player = player;
+            this.isSkull = true;
+        }
         return this;
     }
 
     public StaticItemBuilder potionData(PotionData potionData) {
-        this.isPotion = true;
-        this.potionData = potionData;
+        if (potionData != null) {
+            this.isPotion = true;
+            this.potionData = potionData;
+        }
         return this;
     }
 
     public StaticItemBuilder color(Color color) {
-        this.isPotion = true;
-        this.color = color;
+        if (color != null) {
+            this.isPotion = true;
+            this.color = color;
+        }
         return this;
     }
 
     public StaticItemBuilder pattern(int i, Pattern pattern) {
-        this.isBanner = true;
-        this.patternMap.put(i, pattern);
+        if (pattern != null) {
+            this.isBanner = true;
+            this.patternMap.put(i, pattern);
+        }
         return this;
     }
 
     public StaticItemBuilder patterns(List<Pattern> patterns) {
-        this.isBanner = true;
-        this.patterns = patterns;
+        if (patterns != null && !patterns.isEmpty()) {
+            this.isBanner = true;
+            this.patterns = patterns;
+        }
         return this;
     }
 
     public StaticItemBuilder meta(MetaChange<ItemMeta> meta) {
-        this.metaChange = meta;
+        if (meta != null) {
+            this.metaChange = meta;
+        }
         return this;
     }
 
@@ -171,10 +190,10 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         if (itemMeta == null) itemMeta = itemStack.getItemMeta();
 
         if (name != null) {
-            itemMeta.setDisplayName(TextUtil.colorize(name));
+            itemMeta.setDisplayName(ColorUtils.colorize(name));
         }
 
-        itemMeta.setLore(TextUtil.colorize(lore));
+        itemMeta.setLore(ColorUtils.colorize(lore));
 
         if (!enchantments.isEmpty()) {
             for (Enchantment enchantment : enchantments.keySet()) {
@@ -205,7 +224,10 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         if (isSkull) {
             itemStack.setType(Material.PLAYER_HEAD);
             SkullMeta skullMeta = (SkullMeta) itemMeta;
-            skullMeta.setPlayerProfile(player.getPlayerProfile());
+            PlayerProfile profile = player.getPlayerProfile();
+            if (!profile.isComplete())
+                profile = profile.update().join();
+            skullMeta.setOwnerProfile(profile);
             itemStack.setItemMeta(skullMeta);
         }
 

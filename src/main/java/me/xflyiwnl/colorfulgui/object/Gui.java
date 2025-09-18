@@ -1,7 +1,7 @@
 package me.xflyiwnl.colorfulgui.object;
 
 import me.xflyiwnl.colorfulgui.provider.ColorfulProvider;
-import me.xflyiwnl.colorfulgui.util.TextUtil;
+import me.xflyiwnl.colorfulgui.util.ColorUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -46,7 +46,7 @@ public class Gui {
         this.rows = rows;
         this.mask = mask;
 
-        inventory = Bukkit.createInventory(holder, rows * 9, TextUtil.colorize(title));
+        inventory = Bukkit.createInventory(holder, rows * 9, ColorUtils.colorize(title));
     }
 
     /**
