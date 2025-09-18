@@ -6,7 +6,7 @@
 
     <groupId>me.xflyiwnl</groupId>
     <artifactId>ColorfulGUI</artifactId>
-    <version>2.1</version>
+    <version>3.0-fixed</version>
     <packaging>jar</packaging>
 
     <name>ColorfulGUI</name>
@@ -30,7 +30,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.2.4</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -41,8 +41,8 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Main-Class>org.sonatype.haven.ExodusCli</Main-Class>
-                                        <Build-Number>123</Build-Number>
+                                        <Main-Class>me.xflyiwnl.colorfulgui.ColorfulGUI</Main-Class>
+                                        <Build-Number>3.0</Build-Number>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
@@ -75,12 +75,6 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations-java5</artifactId>
             <version>24.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

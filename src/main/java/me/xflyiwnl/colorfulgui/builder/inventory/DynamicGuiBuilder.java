@@ -1,9 +1,9 @@
 package me.xflyiwnl.colorfulgui.builder.inventory;
 
+import me.xflyiwnl.colorfulgui.provider.ColorfulProvider;
 import me.xflyiwnl.colorfulgui.builder.GuiBuilder;
 import me.xflyiwnl.colorfulgui.object.GuiMask;
 import me.xflyiwnl.colorfulgui.object.PaginatedGui;
-import me.xflyiwnl.colorfulgui.provider.ColorfulProvider;
 
 import java.util.List;
 
@@ -44,6 +44,7 @@ public class DynamicGuiBuilder implements GuiBuilder<PaginatedGui, DynamicGuiBui
     @Override
     public PaginatedGui build() {
         PaginatedGui gui = new PaginatedGui(getHolder(), getTitle(), getRows(), getMask());
+        gui.setHolder(holder);
         getMask().setGui(gui);
         getHolder().setGui(gui);
         getHolder().init();

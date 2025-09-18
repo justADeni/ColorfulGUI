@@ -17,7 +17,6 @@ public class ColorfulGUI {
         registerListeners();
     }
 
-
     private void registerListeners() {
         instance.getServer().getPluginManager().registerEvents(new GuiListener(), instance);
     }

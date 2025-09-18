@@ -1,9 +1,9 @@
 package me.xflyiwnl.colorfulgui.builder.item;
 
-import me.xflyiwnl.colorfulgui.ColorfulGUI;
 import me.xflyiwnl.colorfulgui.builder.ItemBuilder;
+import me.xflyiwnl.colorfulgui.object.action.click.ClickStaticAction;
+import me.xflyiwnl.colorfulgui.ColorfulGUI;
 import me.xflyiwnl.colorfulgui.object.StaticItem;
-import me.xflyiwnl.colorfulgui.object.action.GuiAction;
 import me.xflyiwnl.colorfulgui.object.action.MetaChange;
 import me.xflyiwnl.colorfulgui.util.ColorUtils;
 import org.bukkit.Color;
@@ -13,7 +13,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
@@ -28,6 +27,7 @@ import java.util.*;
 
 public class StaticItemBuilder implements ItemBuilder<StaticItem> {
 
+    private StaticItem guiItem;
     private ItemStack itemStack;
     private ItemMeta itemMeta;
     private Material material;
@@ -47,7 +47,7 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
     private OfflinePlayer player;
 
     private Map<Enchantment, Integer> enchantments = new HashMap<Enchantment, Integer>();
-    private GuiAction<InventoryClickEvent> action;
+    private ClickStaticAction action;
 
     private PotionData potionData;
     private Color color;
@@ -58,6 +58,11 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
     private MetaChange<ItemMeta> metaChange;
 
     public StaticItemBuilder() {
+    }
+
+    public StaticItemBuilder from(StaticItem guiItem) {
+        this.guiItem = guiItem;
+        return this;
     }
 
     public StaticItemBuilder from(ItemStack itemStack) {
@@ -110,9 +115,8 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
-    public StaticItemBuilder action(GuiAction<InventoryClickEvent> action) {
-        if (action != null)
-            this.action = action;
+    public StaticItemBuilder action(ClickStaticAction action) {
+        this.action = action;
         return this;
     }
 
@@ -168,11 +172,17 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
 
         UUID uuid = UUID.randomUUID();
 
-        ItemStack itemStack = this.itemStack;
-        if (itemStack == null) {
+        ItemStack itemStack = guiItem != null ? guiItem.getItemStack() : this.itemStack;
+        if (guiItem != null && itemStack == null ||
+                guiItem == null && itemStack == null) {
             itemStack = new ItemStack(material, amount);
-        } else {
+        }
+
+        if (material != null) {
             itemStack.setType(material);
+        }
+
+        if (amount != 1) {
             itemStack.setAmount(amount);
         }
 
@@ -199,7 +209,11 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
             itemMeta.addItemFlags(itemFlags);
         }
 
-        itemMeta.getPersistentDataContainer().set(new NamespacedKey(ColorfulGUI.getInstance(), "colorfulgui"), PersistentDataType.STRING, uuid.toString());
+        if (guiItem != null) {
+            itemMeta.getPersistentDataContainer().set(new NamespacedKey(ColorfulGUI.getInstance(), "colorfulgui"), PersistentDataType.STRING, guiItem.getUniqueId().toString());
+        } else {
+            itemMeta.getPersistentDataContainer().set(new NamespacedKey(ColorfulGUI.getInstance(), "colorfulgui"), PersistentDataType.STRING, uuid.toString());
+        }
 
         if (metaChange != null) {
             metaChange.execute(itemMeta);
@@ -235,6 +249,14 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
             itemStack.setItemMeta(bannerMeta);
         }
 
-        return new StaticItem(uuid, itemStack, action);
+        if (guiItem != null) {
+            guiItem.setItemStack(itemStack);
+            if (action != null)
+                guiItem.setAction(action);
+            return guiItem;
+        } else {
+            return new StaticItem(uuid, itemStack, action);
+        }
+
     }
 }

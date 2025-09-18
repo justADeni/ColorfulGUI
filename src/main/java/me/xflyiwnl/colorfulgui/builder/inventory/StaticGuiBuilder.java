@@ -1,9 +1,9 @@
 package me.xflyiwnl.colorfulgui.builder.inventory;
 
+import me.xflyiwnl.colorfulgui.provider.ColorfulProvider;
 import me.xflyiwnl.colorfulgui.builder.GuiBuilder;
 import me.xflyiwnl.colorfulgui.object.Gui;
 import me.xflyiwnl.colorfulgui.object.GuiMask;
-import me.xflyiwnl.colorfulgui.provider.ColorfulProvider;
 
 import java.util.List;
 
@@ -44,6 +44,7 @@ public class StaticGuiBuilder implements GuiBuilder<Gui, StaticGuiBuilder> {
     @Override
     public Gui build() {
         Gui gui = new Gui(getHolder(), getTitle(), getRows(), getMask());
+        gui.setHolder(holder);
         getMask().setGui(gui);
         getHolder().setGui(gui);
         getHolder().init();
