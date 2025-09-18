@@ -151,7 +151,7 @@ public class Gui {
         this.title = title;
 
         final List<HumanEntity> viewers = new ArrayList<HumanEntity>(inventory.getViewers());
-        inventory = Bukkit.createInventory(holder, rows * 9, TextUtil.colorize(title));
+        inventory = Bukkit.createInventory(holder, rows * 9, ColorUtils.colorize(title));
 
         // rendering and opening new inventory for viewers
         for (final HumanEntity viewer : viewers) {
