@@ -25,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Supplier;
 
 public class StaticItemBuilder implements ItemBuilder<StaticItem> {
 
@@ -72,10 +73,23 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
+    public <T> StaticItemBuilder from(Supplier<T> genericSupplier) {
+        T value = genericSupplier.get();
+        return switch(value) {
+            case ItemStack item -> from(item);
+            case StaticItem staticItem -> from(staticItem);
+            default -> throw new IllegalStateException("Unexpected value: " + value);
+        };
+    }
+
     public StaticItemBuilder material(Material material) {
         if (material != null)
             this.material = material;
         return this;
+    }
+
+    public StaticItemBuilder material(Supplier<Material> materialSupplier) {
+        return material(materialSupplier.get());
     }
 
     public StaticItemBuilder name(String name) {
@@ -84,10 +98,27 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
-    public StaticItemBuilder lore(List<String> lore) {
-        if (lore != null)
-            this.lore = lore;
+    public StaticItemBuilder name(Supplier<String> nameSupplier) {
+        return name(nameSupplier.get());
+    }
+
+    public StaticItemBuilder lore(List<String> multipleLineLore) {
+        if (multipleLineLore != null)
+            this.lore = multipleLineLore;
         return this;
+    }
+
+    public StaticItemBuilder lore(String oneLineLore) {
+        return lore(List.of(oneLineLore));
+    }
+
+    public <T> StaticItemBuilder lore(Supplier<T> genericSupplier) {
+        T value = genericSupplier.get();
+        return switch (value) {
+            case String oneLineLore -> lore(oneLineLore);
+            case List<?> multipleLineLore -> lore((List<String>) multipleLineLore);
+            default -> throw new IllegalStateException("Unexpected value: " + value);
+        };
     }
 
     public StaticItemBuilder amount(int amount) {
@@ -95,8 +126,17 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
+    public StaticItemBuilder amount(Supplier<Integer> amountSupplier) {
+        return amount(amountSupplier.get());
+    }
+
     public StaticItemBuilder flags(ItemFlag... flags) {
         this.itemFlags = flags;
+        return this;
+    }
+
+    public StaticItemBuilder flags(Supplier<ItemFlag[]> flagsSupplier) {
+        this.itemFlags = flagsSupplier.get();
         return this;
     }
 
@@ -130,11 +170,9 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
     }
 
     public StaticItemBuilder skull(String url) {
-        // Create a new unique player profile
         UUID uuid = UUID.randomUUID();
         PlayerProfile profile = Bukkit.createPlayerProfile(uuid);
 
-        // Set the skin texture
         PlayerTextures textures = profile.getTextures();
         try {
             textures.setSkin(new URL(url));
@@ -143,16 +181,26 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         }
         profile.setTextures(textures);
 
-        // Create the head item
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
         if (skullMeta != null) {
             skullMeta.setOwnerProfile(profile);
             head.setItemMeta(skullMeta);
+            from(head);
         }
         return this;
     }
 
+    public <T> StaticItemBuilder skull(Supplier<T> genericSupplier) {
+        T value = genericSupplier.get();
+        return switch (value) {
+            case String url -> skull(url);
+            case OfflinePlayer offlinePlayer -> skull(offlinePlayer);
+            default -> throw new IllegalStateException("Unexpected value: " + value);
+        };
+    }
+
+    @Deprecated
     public StaticItemBuilder potionData(PotionData potionData) {
         if (potionData != null) {
             this.isPotion = true;
@@ -161,6 +209,7 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
+    @Deprecated
     public StaticItemBuilder color(Color color) {
         if (color != null) {
             this.isPotion = true;
