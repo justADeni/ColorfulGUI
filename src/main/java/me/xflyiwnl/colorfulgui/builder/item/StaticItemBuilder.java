@@ -6,10 +6,7 @@ import me.xflyiwnl.colorfulgui.ColorfulGUI;
 import me.xflyiwnl.colorfulgui.object.StaticItem;
 import me.xflyiwnl.colorfulgui.object.action.MetaChange;
 import me.xflyiwnl.colorfulgui.util.ColorUtils;
-import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -22,7 +19,11 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.*;
 
 public class StaticItemBuilder implements ItemBuilder<StaticItem> {
@@ -124,6 +125,30 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         if (player != null) {
             this.player = player;
             this.isSkull = true;
+        }
+        return this;
+    }
+
+    public StaticItemBuilder skull(String url) {
+        // Create a new unique player profile
+        UUID uuid = UUID.randomUUID();
+        PlayerProfile profile = Bukkit.createPlayerProfile(uuid);
+
+        // Set the skin texture
+        PlayerTextures textures = profile.getTextures();
+        try {
+            textures.setSkin(new URL(url));
+        } catch (MalformedURLException e) {
+            return this;
+        }
+        profile.setTextures(textures);
+
+        // Create the head item
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
+        if (skullMeta != null) {
+            skullMeta.setOwnerProfile(profile);
+            head.setItemMeta(skullMeta);
         }
         return this;
     }
