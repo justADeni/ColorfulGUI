@@ -5,6 +5,7 @@ import me.xflyiwnl.colorfulgui.builder.GuiBuilder;
 import me.xflyiwnl.colorfulgui.object.Gui;
 import me.xflyiwnl.colorfulgui.object.GuiMask;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class StaticGuiBuilder implements GuiBuilder<Gui, StaticGuiBuilder> {
@@ -38,6 +39,12 @@ public class StaticGuiBuilder implements GuiBuilder<Gui, StaticGuiBuilder> {
     @Override
     public StaticGuiBuilder mask(List<String> mask) {
         this.mask.setMask(mask);
+        return this;
+    }
+
+    @Override
+    public StaticGuiBuilder mask(String... mask) {
+        this.mask.setMask(Arrays.asList(mask));
         return this;
     }
 

@@ -15,6 +15,8 @@ public interface GuiBuilder<T extends Gui, B extends GuiBuilder<T, B>> {
 
     B mask(List<String> mask);
 
+    B mask(String... mask);
+
     T build();
 
 }

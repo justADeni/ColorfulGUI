@@ -5,6 +5,7 @@ import me.xflyiwnl.colorfulgui.builder.GuiBuilder;
 import me.xflyiwnl.colorfulgui.object.GuiMask;
 import me.xflyiwnl.colorfulgui.object.PaginatedGui;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class DynamicGuiBuilder implements GuiBuilder<PaginatedGui, DynamicGuiBuilder> {
@@ -38,6 +39,12 @@ public class DynamicGuiBuilder implements GuiBuilder<PaginatedGui, DynamicGuiBui
     @Override
     public DynamicGuiBuilder mask(List<String> mask) {
         this.mask.setMask(mask);
+        return this;
+    }
+
+    @Override
+    public DynamicGuiBuilder mask(String... mask) {
+        this.mask.setMask(Arrays.asList(mask));
         return this;
     }
 
