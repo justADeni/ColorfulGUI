@@ -1,15 +1,14 @@
 package me.xflyiwnl.colorfulgui.builder.item;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.xflyiwnl.colorfulgui.builder.ItemBuilder;
 import me.xflyiwnl.colorfulgui.object.action.click.ClickStaticAction;
 import me.xflyiwnl.colorfulgui.ColorfulGUI;
 import me.xflyiwnl.colorfulgui.object.StaticItem;
 import me.xflyiwnl.colorfulgui.object.action.MetaChange;
 import me.xflyiwnl.colorfulgui.util.ColorUtils;
-import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -22,8 +21,14 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class StaticItemBuilder implements ItemBuilder<StaticItem> {
 
@@ -57,6 +62,8 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
 
     private MetaChange<ItemMeta> metaChange;
 
+    private TooltipDisplay tooltipDisplay;
+
     public StaticItemBuilder() {
     }
 
@@ -71,10 +78,23 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
+    public <T> StaticItemBuilder from(Supplier<T> genericSupplier) {
+        T value = genericSupplier.get();
+        return switch(value) {
+            case ItemStack item -> from(item);
+            case StaticItem staticItem -> from(staticItem);
+            default -> throw new IllegalStateException("Unexpected value: " + value);
+        };
+    }
+
     public StaticItemBuilder material(Material material) {
         if (material != null)
             this.material = material;
         return this;
+    }
+
+    public StaticItemBuilder material(Supplier<Material> materialSupplier) {
+        return material(materialSupplier.get());
     }
 
     public StaticItemBuilder name(String name) {
@@ -83,10 +103,27 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
-    public StaticItemBuilder lore(List<String> lore) {
-        if (lore != null)
-            this.lore = lore;
+    public StaticItemBuilder name(Supplier<String> nameSupplier) {
+        return name(nameSupplier.get());
+    }
+
+    public StaticItemBuilder lore(List<String> multipleLineLore) {
+        if (multipleLineLore != null)
+            this.lore = multipleLineLore;
         return this;
+    }
+
+    public StaticItemBuilder lore(String oneLineLore) {
+        return lore(List.of(oneLineLore));
+    }
+
+    public <T> StaticItemBuilder lore(Supplier<T> genericSupplier) {
+        T value = genericSupplier.get();
+        return switch (value) {
+            case String oneLineLore -> lore(oneLineLore);
+            case List<?> multipleLineLore -> lore((List<String>) multipleLineLore);
+            default -> throw new IllegalStateException("Unexpected value: " + value);
+        };
     }
 
     public StaticItemBuilder amount(int amount) {
@@ -94,8 +131,17 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
+    public StaticItemBuilder amount(Supplier<Integer> amountSupplier) {
+        return amount(amountSupplier.get());
+    }
+
     public StaticItemBuilder flags(ItemFlag... flags) {
         this.itemFlags = flags;
+        return this;
+    }
+
+    public StaticItemBuilder flags(Supplier<ItemFlag[]> flagsSupplier) {
+        this.itemFlags = flagsSupplier.get();
         return this;
     }
 
@@ -128,6 +174,38 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
+    public StaticItemBuilder skull(String url) {
+        UUID uuid = UUID.randomUUID();
+        PlayerProfile profile = Bukkit.createPlayerProfile(uuid);
+
+        PlayerTextures textures = profile.getTextures();
+        try {
+            textures.setSkin(new URL(url));
+        } catch (MalformedURLException e) {
+            return this;
+        }
+        profile.setTextures(textures);
+
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
+        if (skullMeta != null) {
+            skullMeta.setOwnerProfile(profile);
+            head.setItemMeta(skullMeta);
+            from(head);
+        }
+        return this;
+    }
+
+    public <T> StaticItemBuilder skull(Supplier<T> genericSupplier) {
+        T value = genericSupplier.get();
+        return switch (value) {
+            case String url -> skull(url);
+            case OfflinePlayer offlinePlayer -> skull(offlinePlayer);
+            default -> throw new IllegalStateException("Unexpected value: " + value);
+        };
+    }
+
+    @Deprecated
     public StaticItemBuilder potionData(PotionData potionData) {
         if (potionData != null) {
             this.isPotion = true;
@@ -136,6 +214,7 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
+    @Deprecated
     public StaticItemBuilder color(Color color) {
         if (color != null) {
             this.isPotion = true;
@@ -164,6 +243,11 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         if (meta != null) {
             this.metaChange = meta;
         }
+        return this;
+    }
+
+    public StaticItemBuilder toolTipDisplay(Function<TooltipDisplay.Builder, TooltipDisplay.Builder> display) {
+        tooltipDisplay = display.apply(TooltipDisplay.tooltipDisplay()).build();
         return this;
     }
 
@@ -247,6 +331,10 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
                 });
             }
             itemStack.setItemMeta(bannerMeta);
+        }
+
+        if (tooltipDisplay != null) {
+            itemStack.setData(DataComponentTypes.TOOLTIP_DISPLAY, tooltipDisplay);
         }
 
         if (guiItem != null) {
