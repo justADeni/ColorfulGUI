@@ -23,8 +23,18 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
 
+/**
+ * Event listener for handling ColorfulGUI inventory events.
+ * This listener processes clicks, opens, closes, and drags for ColorfulGUI inventories.
+ */
 public class GuiListener implements Listener {
 
+    /**
+     * Handles inventory click events for ColorfulGUI inventories.
+     * This method processes item clicks and executes appropriate actions.
+     *
+     * @param event The inventory click event
+     */
     @EventHandler
     public void onClick(InventoryClickEvent event) {
 
@@ -92,6 +102,12 @@ public class GuiListener implements Listener {
 
     }
 
+    /**
+     * Handles inventory open events for ColorfulGUI inventories.
+     * This method starts update tasks and calls provider open handlers.
+     *
+     * @param event The inventory open event
+     */
     @EventHandler
     public void onOpen(InventoryOpenEvent event) {
 
@@ -119,6 +135,12 @@ public class GuiListener implements Listener {
 
     }
 
+    /**
+     * Handles inventory close events for ColorfulGUI inventories.
+     * This method stops update tasks and calls provider close handlers.
+     *
+     * @param event The inventory close event
+     */
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
 
@@ -145,6 +167,12 @@ public class GuiListener implements Listener {
 
     }
 
+    /**
+     * Handles inventory drag events for ColorfulGUI inventories.
+     * This method processes item dragging and calls provider drag handlers.
+     *
+     * @param event The inventory drag event
+     */
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
 

@@ -51,32 +51,58 @@ public abstract class ColorfulProvider<T extends Gui> implements InventoryHolder
     }
 
     /**
-     * Initialize method
-     **/
-    public void init() {
-    }
+     * Initialize method called when the GUI is first created.
+     * Subclasses should override this method to set up their initial GUI state.
+     */
+    public abstract void init();
 
     /**
-     * Update method, runs from {@link UpdateTask}
-     **/
+     * Update method called periodically by the UpdateTask.
+     * Subclasses can override this method to perform periodic updates to their GUI.
+     */
     public void update() {
     }
 
+    /**
+     * Called when a player clicks in the GUI inventory.
+     * Subclasses can override this method to handle custom click behavior.
+     *
+     * @param event The inventory click event
+     */
     public void onClick(InventoryClickEvent event) {
     }
 
+    /**
+     * Called when a player opens the GUI inventory.
+     * Subclasses can override this method to handle GUI opening behavior.
+     *
+     * @param event The inventory open event
+     */
     public void onOpen(InventoryOpenEvent event) {
     }
 
+    /**
+     * Called when a player closes the GUI inventory.
+     * Subclasses can override this method to handle GUI closing behavior.
+     *
+     * @param event The inventory close event
+     */
     public void onClose(InventoryCloseEvent event) {
     }
 
+    /**
+     * Called when a player drags items in the GUI inventory.
+     * Subclasses can override this method to handle custom drag behavior.
+     *
+     * @param event The inventory drag event
+     */
     public void onDrag(InventoryDragEvent event) {
     }
 
     /**
-     * Showing {@link Gui} to {@link Player}
-     **/
+     * Shows the GUI to the associated player.
+     * This method renders and opens the GUI inventory.
+     */
     public void show() {
         getGui().show(player);
     }

@@ -59,18 +59,38 @@ public class StaticGuiBuilder implements GuiBuilder<Gui, StaticGuiBuilder> {
         return gui;
     }
 
+    /**
+     * Gets the current title set for the GUI.
+     *
+     * @return The GUI title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Gets the current number of rows set for the GUI.
+     *
+     * @return The number of rows
+     */
     public int getRows() {
         return rows;
     }
 
+    /**
+     * Gets the current mask set for the GUI.
+     *
+     * @return The GuiMask instance
+     */
     public GuiMask getMask() {
         return mask;
     }
 
+    /**
+     * Gets the current holder set for the GUI.
+     *
+     * @return The ColorfulProvider holder
+     */
     public ColorfulProvider<Gui> getHolder() {
         return holder;
     }

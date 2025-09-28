@@ -45,6 +45,12 @@ public class ColorUtils {
 	*
 	* */
 
+	/**
+	 * Colorizes a list of strings by applying color codes to each string.
+	 *
+	 * @param text The list of strings to colorize
+	 * @return A new list containing the colorized strings
+	 */
 	public static List<String> colorize(List<String> text) {
 		List<String> list = new ArrayList<>(text.size());
 		for (String string: text) {
@@ -53,10 +59,25 @@ public class ColorUtils {
 		return list;
 	}
 
+	/**
+	 * Colorizes a string by applying color codes using the default '&' symbol.
+	 * Supports gradients, legacy colors, and RGB hex colors.
+	 *
+	 * @param text The string to colorize
+	 * @return The colorized string
+	 */
 	public static String colorize(String text) {
 		return colorize(text, '&');
 	}
 	
+	/**
+	 * Colorizes a string by applying color codes using the specified color symbol.
+	 * Supports gradients, legacy colors, and RGB hex colors.
+	 * 
+	 * @param text The string to colorize
+	 * @param colorSymbol The character used to denote color codes
+	 * @return The colorized string
+	 */
 	public static String colorize(String text, char colorSymbol) {
 		Matcher g = gradient.matcher(text);
 		Matcher l = legacyGradient.matcher(text);
@@ -90,10 +111,22 @@ public class ColorUtils {
 		return ChatColor.translateAlternateColorCodes(colorSymbol, text);
 	}
 	
+	/**
+	 * Removes all color codes from a string.
+	 *
+	 * @param text The string to remove colors from
+	 * @return The string without color codes
+	 */
 	public static String removeColors(String text) {
 		return ChatColor.stripColor(text);
 	}
 	
+	/**
+	 * Gets a list of characters from the text without any color codes.
+	 *
+	 * @param text The string to process
+	 * @return A list of characters without color codes
+	 */
 	public static List<Character> charactersWithoutColors(String text) {
 		text = removeColors(text);
 		final List<Character> result = new ArrayList<>();
@@ -103,10 +136,24 @@ public class ColorUtils {
 		return result;
 	}
 	
+	/**
+	 * Gets a list of characters from the text with their associated color codes.
+	 * Uses the default '§' color symbol.
+	 *
+	 * @param text The string to process
+	 * @return A list of strings containing characters with their color codes
+	 */
 	public static List<String> charactersWithColors(String text) {
 		return charactersWithColors(text, '§');
 	}
 	
+	/**
+	 * Gets a list of characters from the text with their associated color codes.
+	 *
+	 * @param text The string to process
+	 * @param colorSymbol The character used to denote color codes
+	 * @return A list of strings containing characters with their color codes
+	 */
 	public static List<String> charactersWithColors(String text, char colorSymbol) {
 		final List<String> result = new ArrayList<>();
 		StringBuilder colors = new StringBuilder();
