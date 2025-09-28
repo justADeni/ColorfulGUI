@@ -4,6 +4,8 @@ import me.xflyiwnl.colorfulgui.builder.ItemBuilder;
 import me.xflyiwnl.colorfulgui.object.action.ClickAction;
 import me.xflyiwnl.colorfulgui.object.event.ClickItemEvent;
 import me.xflyiwnl.colorfulgui.ColorfulGUI;
+import me.xflyiwnl.colorfulgui.provider.ColorfulProvider;
+import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -117,6 +119,14 @@ public abstract class GuiItem {
      **/
     public void setAction(ClickAction<? extends ClickItemEvent> action) {
         this.action = action;
+    }
+
+    public <T> void addTo(ColorfulProvider<?> gui) {
+        gui.getGui().addItem(this);
+    }
+
+    public <T> void addTo(ColorfulProvider<?> gui, String mask) {
+        gui.getGui().addMask(mask, this);
     }
 
 }
