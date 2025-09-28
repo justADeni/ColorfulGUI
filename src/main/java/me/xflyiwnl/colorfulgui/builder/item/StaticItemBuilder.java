@@ -113,10 +113,6 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
-    public StaticItemBuilder lore(String oneLineLore) {
-        return lore(List.of(oneLineLore));
-    }
-
     public <T> StaticItemBuilder lore(Supplier<T> genericSupplier) {
         T value = genericSupplier.get();
         return switch (value) {
@@ -124,6 +120,13 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
             case List<?> multipleLineLore -> lore((List<String>) multipleLineLore);
             default -> throw new IllegalStateException("Unexpected value: " + value);
         };
+    }
+
+    public StaticItemBuilder lore(String... lore) {
+        if (lore.length > 0)
+            this.lore = Arrays.asList(lore);
+
+        return this;
     }
 
     public StaticItemBuilder amount(int amount) {
