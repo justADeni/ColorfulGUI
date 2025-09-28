@@ -251,6 +251,66 @@ public class StaticItemBuilder implements ItemBuilder<StaticItem> {
         return this;
     }
 
+    public StaticItemBuilder hideAllToolTips() {
+        toolTipDisplay(t -> t.hideTooltip(true));
+        return this;
+    }
+
+    public StaticItemBuilder hideAllToolTipsButName() {
+        toolTipDisplay(t -> t.addHiddenComponents(
+                DataComponentTypes.ENCHANTMENTS,
+                DataComponentTypes.LORE,
+                DataComponentTypes.UNBREAKABLE,
+                DataComponentTypes.CUSTOM_MODEL_DATA,
+                DataComponentTypes.ITEM_MODEL,
+                DataComponentTypes.BLOCKS_ATTACKS,
+                DataComponentTypes.CAN_BREAK,
+                DataComponentTypes.ATTRIBUTE_MODIFIERS,
+                DataComponentTypes.BANNER_PATTERNS,
+                DataComponentTypes.CONSUMABLE,
+                DataComponentTypes.BUNDLE_CONTENTS,
+                DataComponentTypes.DAMAGE,
+                DataComponentTypes.DAMAGE_RESISTANT,
+                DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE,
+                DataComponentTypes.CONSUMABLE,
+                DataComponentTypes.POTION_CONTENTS,
+                DataComponentTypes.WRITABLE_BOOK_CONTENT,
+                DataComponentTypes.CAN_PLACE_ON,
+                DataComponentTypes.DEATH_PROTECTION,
+                DataComponentTypes.EQUIPPABLE,
+                DataComponentTypes.ENCHANTABLE,
+                DataComponentTypes.DYED_COLOR
+        ));
+        return this;
+    }
+
+    public StaticItemBuilder hideAllToolTipsButNameLore() {
+        toolTipDisplay(t -> t.addHiddenComponents(
+                DataComponentTypes.ENCHANTMENTS,
+                DataComponentTypes.UNBREAKABLE,
+                DataComponentTypes.CUSTOM_MODEL_DATA,
+                DataComponentTypes.ITEM_MODEL,
+                DataComponentTypes.BLOCKS_ATTACKS,
+                DataComponentTypes.CAN_BREAK,
+                DataComponentTypes.ATTRIBUTE_MODIFIERS,
+                DataComponentTypes.BANNER_PATTERNS,
+                DataComponentTypes.CONSUMABLE,
+                DataComponentTypes.BUNDLE_CONTENTS,
+                DataComponentTypes.DAMAGE,
+                DataComponentTypes.DAMAGE_RESISTANT,
+                DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE,
+                DataComponentTypes.CONSUMABLE,
+                DataComponentTypes.POTION_CONTENTS,
+                DataComponentTypes.WRITABLE_BOOK_CONTENT,
+                DataComponentTypes.CAN_PLACE_ON,
+                DataComponentTypes.DEATH_PROTECTION,
+                DataComponentTypes.EQUIPPABLE,
+                DataComponentTypes.ENCHANTABLE,
+                DataComponentTypes.DYED_COLOR
+        ));
+        return this;
+    }
+
     @Override
     public StaticItem build() {
 
