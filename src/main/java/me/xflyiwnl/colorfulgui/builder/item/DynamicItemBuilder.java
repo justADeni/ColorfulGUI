@@ -1,5 +1,7 @@
 package me.xflyiwnl.colorfulgui.builder.item;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.xflyiwnl.colorfulgui.object.StaticItem;
 import me.xflyiwnl.colorfulgui.object.action.click.ClickDynamicAction;
 import me.xflyiwnl.colorfulgui.ColorfulGUI;
@@ -27,6 +29,7 @@ import org.bukkit.profile.PlayerTextures;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -70,6 +73,8 @@ public class DynamicItemBuilder implements ItemBuilder<DynamicItem> {
     private List<Pattern> patterns;
 
     private MetaChange<ItemMeta> metaChange;
+
+    private TooltipDisplay tooltipDisplay;
 
     /**
      * Creates a new DynamicItemBuilder instance.
@@ -452,6 +457,91 @@ public class DynamicItemBuilder implements ItemBuilder<DynamicItem> {
      */
     public DynamicItemBuilder meta(Supplier<ItemMeta> metaSupplier) {
         return meta(metaSupplier.get());
+    }
+
+    /**
+     * Sets the tooltip display configuration for the item.
+     * This allows for customizing which tooltip components are shown.
+     *
+     * @param display The function to configure the tooltip display
+     * @return This builder instance for method chaining
+     */
+    public DynamicItemBuilder toolTipDisplay(Function<TooltipDisplay.Builder, TooltipDisplay.Builder> display) {
+        tooltipDisplay = display.apply(TooltipDisplay.tooltipDisplay()).build();
+        return this;
+    }
+
+    /**
+     * Hides all tooltip components for the item.
+     *
+     * @return This builder instance for method chaining
+     */
+    public DynamicItemBuilder hideAllToolTips() {
+        toolTipDisplay(t -> t.hideTooltip(true));
+        return this;
+    }
+
+    /**
+     * Hides all tooltip components except the name for the item.
+     *
+     * @return This builder instance for method chaining
+     */
+    public DynamicItemBuilder hideAllToolTipsButName() {
+        toolTipDisplay(t -> t.addHiddenComponents(
+                DataComponentTypes.ENCHANTMENTS,
+                DataComponentTypes.LORE,
+                DataComponentTypes.UNBREAKABLE,
+                DataComponentTypes.CUSTOM_MODEL_DATA,
+                DataComponentTypes.ITEM_MODEL,
+                DataComponentTypes.BLOCKS_ATTACKS,
+                DataComponentTypes.CAN_BREAK,
+                DataComponentTypes.ATTRIBUTE_MODIFIERS,
+                DataComponentTypes.BANNER_PATTERNS,
+                DataComponentTypes.CONSUMABLE,
+                DataComponentTypes.BUNDLE_CONTENTS,
+                DataComponentTypes.DAMAGE,
+                DataComponentTypes.DAMAGE_RESISTANT,
+                DataComponentTypes.CONSUMABLE,
+                DataComponentTypes.POTION_CONTENTS,
+                DataComponentTypes.WRITABLE_BOOK_CONTENT,
+                DataComponentTypes.CAN_PLACE_ON,
+                DataComponentTypes.DEATH_PROTECTION,
+                DataComponentTypes.EQUIPPABLE,
+                DataComponentTypes.ENCHANTABLE,
+                DataComponentTypes.DYED_COLOR
+        ));
+        return this;
+    }
+
+    /**
+     * Hides all tooltip components except the name and lore for the item.
+     *
+     * @return This builder instance for method chaining
+     */
+    public DynamicItemBuilder hideAllToolTipsButNameLore() {
+        toolTipDisplay(t -> t.addHiddenComponents(
+                DataComponentTypes.ENCHANTMENTS,
+                DataComponentTypes.UNBREAKABLE,
+                DataComponentTypes.CUSTOM_MODEL_DATA,
+                DataComponentTypes.ITEM_MODEL,
+                DataComponentTypes.BLOCKS_ATTACKS,
+                DataComponentTypes.CAN_BREAK,
+                DataComponentTypes.ATTRIBUTE_MODIFIERS,
+                DataComponentTypes.BANNER_PATTERNS,
+                DataComponentTypes.CONSUMABLE,
+                DataComponentTypes.BUNDLE_CONTENTS,
+                DataComponentTypes.DAMAGE,
+                DataComponentTypes.DAMAGE_RESISTANT,
+                DataComponentTypes.CONSUMABLE,
+                DataComponentTypes.POTION_CONTENTS,
+                DataComponentTypes.WRITABLE_BOOK_CONTENT,
+                DataComponentTypes.CAN_PLACE_ON,
+                DataComponentTypes.DEATH_PROTECTION,
+                DataComponentTypes.EQUIPPABLE,
+                DataComponentTypes.ENCHANTABLE,
+                DataComponentTypes.DYED_COLOR
+        ));
+        return this;
     }
 
     /**
