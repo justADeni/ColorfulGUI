@@ -11,9 +11,14 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Main ColorfulGUI class that serves as the entry point for creating custom GUIs.
  * This class provides factory methods for creating GUI builders and item builders.
  */
-public class ColorfulGUI {
+public class ColorfulGUI extends JavaPlugin {
 
     private static JavaPlugin instance;
+
+    public ColorfulGUI() {
+        super();
+        instance = this;
+    }
 
     /**
      * Constructs a new ColorfulGUI instance and initializes the GUI system.
@@ -21,7 +26,8 @@ public class ColorfulGUI {
      * @param plugin The JavaPlugin instance that will host this GUI system
      */
     public ColorfulGUI(JavaPlugin plugin) {
-        instance = plugin;
+        if (instance == null)
+            instance = plugin;
 
         registerListeners();
     }

@@ -1,0 +1,6 @@
+name: ${project.name}
+version: ${project.version}
+main: me.xflyiwnl.colorfulgui.ColorfulGUI
+api-version: '1.21'
+authors: [ xflyiwnl, justADeni ]
+description: An API for creating complex inventory GUIs with ease
