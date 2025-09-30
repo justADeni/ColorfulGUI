@@ -17,7 +17,12 @@ public class ColorfulGUI extends JavaPlugin {
 
     public ColorfulGUI() {
         super();
+    }
+
+    @Override
+    public void onEnable() {
         instance = this;
+        registerListeners();
     }
 
     /**
@@ -26,10 +31,10 @@ public class ColorfulGUI extends JavaPlugin {
      * @param plugin The JavaPlugin instance that will host this GUI system
      */
     public ColorfulGUI(JavaPlugin plugin) {
-        if (instance == null)
+        if (instance == null) {
             instance = plugin;
-
-        registerListeners();
+            registerListeners();
+        }
     }
 
     private void registerListeners() {
